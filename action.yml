@@ -1,0 +1,66 @@
+description: windows mingw compiler
+
+
+inputs:
+  token:
+    description: github token
+    required: false
+    default: ''
+
+  arch:
+    description: system platform
+    required: false
+    default: rnc64
+
+
+runs:
+  using: composite
+
+  steps:
+    - uses: li1ht2ay-3es/gi1-ac2io3s@checkout-repo
+      with:
+        branch: upstream
+
+        token: ${{ inputs.token }}
+        auto: true
+
+
+    - uses: li1ht2ay-3es/gi1-ac2io3s@mingw-install
+      with:
+        arch: ${{ inputs.arch }}
+
+
+    - uses: hendrikmuhs/ccache-action@main
+      with:
+        key: ${{ inputs.arch }}
+
+
+    - shell: bash
+      run: |
+        merge () {
+          echo "<<< ===  merging  $1  === >>>"
+          git merge origin/$1
+          echo ""
+        }
+
+        # merge gameboy-prof9
+
+
+    - shell: bash
+      env:
+        CC: ccache ${{ env.MINGW_CC }}
+        CXX: ccache ${{ env.MINGW_CXX }}
+      run: |
+        make ${{ inputs.arch }}
+
+
+#    - shell: bash
+#      run: |
+#        ls -a -R
+
+
+    - uses: actions/upload-artifact@main
+      with:
+        name: ${{ inputs.arch }}
+        path: |
+          *.exe
