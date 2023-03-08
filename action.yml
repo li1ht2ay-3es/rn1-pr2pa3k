@@ -10,6 +10,11 @@ inputs:
   arch:
     description: system platform
     required: false
+    default: x64
+
+  platform:
+    description: system platform
+    required: false
     default: rnc64
 
 
@@ -51,7 +56,8 @@ runs:
         CC: ccache ${{ env.MINGW_CC }}
         CXX: ccache ${{ env.MINGW_CXX }}
       run: |
-        make ${{ inputs.arch }}
+        make ${{ inputs.platform }}
+        mv ${{ inputs.platform }} "${{ inputs.platform }}.exe"
 
 
 #    - shell: bash
