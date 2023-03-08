@@ -12,11 +12,6 @@ inputs:
     required: false
     default: x64
 
-  platform:
-    description: system platform
-    required: false
-    default: rnc64
-
 
 runs:
   using: composite
@@ -51,13 +46,22 @@ runs:
         # merge gameboy-prof9
 
 
-    - shell: bash
+    - if: inputs.arch == 'x86'
+      shell: bash
       env:
         CC: ccache ${{ env.MINGW_CC }}
         CXX: ccache ${{ env.MINGW_CXX }}
       run: |
-        make ${{ inputs.platform }}
-        mv ${{ inputs.platform }} "${{ inputs.platform }}.exe"
+        make rnc32
+
+
+    - if: inputs.arch == 'x64'
+      shell: bash
+      env:
+        CC: ccache ${{ env.MINGW_CC }}
+        CXX: ccache ${{ env.MINGW_CXX }}
+      run: |
+        make rnc64
 
 
 #    - shell: bash
