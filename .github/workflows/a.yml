@@ -8,7 +8,7 @@ jobs:
   build_windows:
     strategy:
       matrix:
-        arch: [rnc32, rnc64]
+        arch: [x86, x64]
       fail-fast: false
 
 
