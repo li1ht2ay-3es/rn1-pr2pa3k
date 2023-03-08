@@ -1,15 +1,21 @@
 on:
+  push:
   workflow_dispatch:
-  schedule:
-    - cron: '0 5 * * *'
 
 
 jobs:
 
-  cron:
+  build_windows:
+    strategy:
+      matrix:
+        arch: [rnc32, rnc64]
+      fail-fast: false
+
+
     runs-on: ubuntu-latest
 
     steps:
-      - uses: li1ht2ay-3es/rn1_pr2pa3k@cron
+      - uses: li1ht2ay-3es/rn1-pr2pa3k@build_windows
         with:
           token: ${{ secrets.token }}
+          arch: ${{ matrix.arch }}
